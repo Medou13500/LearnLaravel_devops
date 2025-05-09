@@ -1,0 +1,66 @@
+version: '3.1'
+
+services:
+  postgres:
+    #! Je creer un container postgres
+    image: postgres:latest
+    #! Mise en place image officielle de postgres
+    container_name: postgres
+    #! J'ai récupéré les variables d'environnement pour faire fonctionner postgres
+    environment:
+      #! Nom utilisateur PostgreSQL
+      - POSTGRES_USER=mehdy
+      #! Mot de passe pour se connecter à Postgres
+      - POSTGRES_PASSWORD=postgres
+      #! Création de la base de données
+      - POSTGRES_DB=learnLaravel
+    #! Je mets une sauvegarde de mes données qui sont dans mon container dans un répertoire postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+     #! Port par défaut Postgres
+      - "5432:5432"
+    #! Je relie pg_admin et Postgres car les deux containers sont indépendants
+    networks:
+      - pgadmin_network
+    #! Je redémarre le container Docker automatiquement si le lancement du container échoue
+    restart: unless-stopped
+
+  pgadmin:
+    #! Je créer un container pgAdmin
+    image: dpage/pgadmin4
+    #! Je créer une image pgAdmin
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=mehdybouzid@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+    #! Je créer un port pour PGAdmin
+    ports:
+      - "8080:80"
+    #! Je mets une sauvegarde de mes données qui sont dans mon container dans un répertoire pgAdmin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - pgadmin_network
+    restart: unless-stopped
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+     - "8081:8080"  # Jenkins sera accessible via http://localhost:8081
+     - "50000:50000"
+    volumes:
+     - jenkins_home:/var/jenkins_home
+    networks:
+     - pgadmin_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:  # Volume pour les données PostgreSQL
+  pgadmin_data:   # Volume pour les données pgAdmin
+  jenkins_home:   # Volume pour les données de Jenkins
+
+networks:
+  pgadmin_network:
+    driver: bridge
