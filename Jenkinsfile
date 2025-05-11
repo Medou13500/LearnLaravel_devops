@@ -23,10 +23,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline exécutée avec succès dans un conteneur Docker Laravel.'
+            echo "Pipeline exécutée avec succès dans un conteneur Docker Laravel."
         }
         failure {
-            echo 'Erreur pendant l’exécution du pipeline Docker Laravel.'
+            echo "Erreur pendant l'exécution du pipeline Docker Laravel."
         }
     }
 }
