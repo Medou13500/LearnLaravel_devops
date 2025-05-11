@@ -1,0 +1,10 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    docker-compose \
+    unzip curl git zip php-cli php-mbstring php-xml php-curl php-zip
+
+USER jenkins
