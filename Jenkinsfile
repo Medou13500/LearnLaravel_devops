@@ -12,8 +12,8 @@ pipeline {
                         mv composer.phar /usr/local/bin/composer &&
                         composer install &&
                         cp .env.example .env || true &&
-                        php artisan key:generate || true &&
-                        php artisan route:list &&
+                        php artisan key:generate &&
+                        php artisan migrate:fresh --seed || true &&
                         php artisan test
                     "
                 '''
@@ -23,12 +23,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline exécuté avec succès dans Docker.'
+            echo 'Pipeline exécutée avec succès dans un conteneur Docker Laravel.'
         }
         failure {
-            echo 'Erreur durant l\'exécution dans Docker.'
+            echo 'Erreur pendant l’exécution du pipeline Docker Laravel.'
         }
     }
 }
-
-
