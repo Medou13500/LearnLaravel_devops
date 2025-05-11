@@ -14,7 +14,7 @@ pipeline {
                         cp .env.example .env || true &&
                         php artisan key:generate || true &&
                         php artisan route:list &&
-                        php artisan test || echo 'Aucun test défini'
+                        php artisan test
                     "
                 '''
             }
@@ -31,4 +31,4 @@ pipeline {
     }
 }
 
-              
+
